@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ingresar Datos - RutaSmart</title>
+  <link rel="stylesheet" href="styles/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Ingresar Datos del Trabajador</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="rutas.html">Ver Rutas</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="form-trabajador">
+      <label>Nombre: <input type="text" name="nombre" required /></label>
+      <label>Dirección: <input type="text" name="direccion" required /></label>
+      <label>Teléfono: <input type="tel" name="telefono" required /></label>
+      <label>Día:
+        <select name="dia" required>
+          <option value="">Seleccionar</option>
+          <option value="lunes">Lunes</option>
+          <option value="martes">Martes</option>
+          <option value="miércoles">Miércoles</option>
+          <option value="jueves">Jueves</option>
+          <option value="viernes">Viernes</option>
+          <option value="sábado">Sábado</option>
+          <option value="domingo">Domingo</option>
+        </select>
+      </label>
+      <button type="submit">Guardar</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 RutaSmart</p>
+  </footer>
+
+  <!-- Tu script de ingreso que ya incluye Firebase (usando módulos) -->
+  <script type="module" src="scripts/ingreso.js"></script>
+</body>
+</html>

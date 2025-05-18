@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ver Rutas - RutaSmart</title>
+  <link rel="stylesheet" href="styles/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Rutas de Trabajadores</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="ingreso.html">Ingresar Datos</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="rutas-container">
+      <h2>Trabajadores por día</h2>
+      <div id="rutas"></div>
+    </section>
+
+    <section>
+      <h2>Ruta Circular en Mapa</h2>
+      <div id="mapa-ruta" style="height: 500px; width: 100%; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 RutaSmart</p>
+  </footer>
+
+  <!-- Cargar jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Este script solo define initMap globalmente antes de cargar Google Maps -->
+  <script>
+    // Creamos una función temporal que Google Maps usará como callback
+    window.initMap = () => {
+      import("./scripts/rutas.js").then(mod => {
+        if (typeof mod.initMap === "function") {
+          mod.initMap(); // Llama a initMap exportada desde rutas.js
+        } else {
+          console.error("initMap no fue exportada desde rutas.js");
+        }
+      });
+    };
+  </script>
+
+  <!-- Google Maps la cargará y buscará window.initMap -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClneoLfhXNZgjOuMUhP-L2h0Jpg3lOlE4&callback=initMap" async defer></script>
+</body>
+</html>
