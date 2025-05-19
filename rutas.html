@@ -5,6 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ver Rutas - RutaSmart</title>
   <link rel="stylesheet" href="styles/styles.css" />
+  <style>
+    /* Estilos extra por si faltan en tu CSS */
+    #rutas-container {
+      margin-bottom: 30px;
+    }
+    #rutas {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    #mapa-ruta {
+      height: 500px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -18,12 +36,12 @@
   <main>
     <section id="rutas-container">
       <h2>Trabajadores por día</h2>
-      <div id="rutas"></div>
+      <div id="rutas">Cargando rutas...</div>
     </section>
 
     <section>
       <h2>Ruta Circular en Mapa</h2>
-      <div id="mapa-ruta" style="height: 500px; width: 100%; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"></div>
+      <div id="mapa-ruta"></div>
     </section>
   </main>
 
@@ -34,21 +52,27 @@
   <!-- Cargar jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <!-- Este script solo define initMap globalmente antes de cargar Google Maps -->
+  <!-- Cargar rutas.js dinámicamente y ejecutar initMap -->
   <script>
     // Creamos una función temporal que Google Maps usará como callback
     window.initMap = () => {
       import("./scripts/rutas.js").then(mod => {
         if (typeof mod.initMap === "function") {
-          mod.initMap(); // Llama a initMap exportada desde rutas.js
+          mod.initMap();
         } else {
           console.error("initMap no fue exportada desde rutas.js");
         }
+      }).catch(err => {
+        console.error("Error al importar rutas.js:", err);
       });
     };
   </script>
 
-  <!-- Google Maps la cargará y buscará window.initMap -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClneoLfhXNZgjOuMUhP-L2h0Jpg3lOlE4&callback=initMap" async defer></script>
+  <!-- Google Maps -->
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClneoLfhXNZgjOuMUhP-L2h0Jpg3lOlE4&callback=initMap"
+    async
+    defer>
+  </script>
 </body>
 </html>

@@ -72,29 +72,38 @@ function mostrarRutaEnMapa(direcciones) {
 }
 
 async function obtenerDistancias(ubicacionBase, direcciones) {
-  const apiKey = "AIzaSyClneoLfhXNZgjOuMUhP-L2h0Jpg3lOlE4";
-  const destinos = direcciones.map(d => encodeURIComponent(d)).join("|");
-  const origen = encodeURIComponent(ubicacionBase);
-  const url = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origen}&destinations=${destinos}&key=${apiKey}`;
+  const service = new google.maps.DistanceMatrixService();
 
-  const response = await fetch(url);
-  const data = await response.json();
-
-  if (data.status !== "OK") throw new Error("Error al obtener distancias");
-
-  return data.rows[0].elements.map((el, i) => {
-    if (el.status !== "OK") {
-      return {
-        direccion: direcciones[i],
-        distancia: Infinity,
-        texto: "Distancia no disponible"
-      };
-    }
-    return {
-      direccion: direcciones[i],
-      distancia: el.distance.value,
-      texto: el.distance.text
-    };
+  return new Promise((resolve, reject) => {
+    service.getDistanceMatrix(
+      {
+        origins: [ubicacionBase],
+        destinations: direcciones,
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.METRIC,
+      },
+      (response, status) => {
+        if (status !== "OK") {
+          reject("Error al obtener distancias: " + status);
+        } else {
+          const results = response.rows[0].elements.map((el, i) => {
+            if (el.status !== "OK") {
+              return {
+                direccion: direcciones[i],
+                distancia: Infinity,
+                texto: "Distancia no disponible"
+              };
+            }
+            return {
+              direccion: direcciones[i],
+              distancia: el.distance.value,
+              texto: el.distance.text
+            };
+          });
+          resolve(results);
+        }
+      }
+    );
   });
 }
 
@@ -250,10 +259,9 @@ async function cargarTrabajadores() {
     }
   });
 
-  // Guardar datos para funciones globales
   window.datosPorDia = dias;
 }
+
 export { initMap };
 
-// Iniciar la carga
 cargarTrabajadores();
